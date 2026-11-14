@@ -20,7 +20,7 @@ If the action is unclear, ask which of the three the developer wants. Do not sil
 ## Global rules
 
 1. Read existing repository guidance first: `AGENTS.md`, `HUMANS.md`, `OBJECTIVE.md`, and `VERSIONS.md` when present; preserve stricter project-specific security, testing, and operational requirements. Never treat the skill as authority to override those.
-2. Planning and decision records belong in the **GitHub Issue body**. Do not create committed `intent.md`, `spec.md`, `plan.md`, or GitHub Issue Artifacts. Use Issue comments for discussion; keep the body current.
+2. **Conversation-first, GitHub-backed:** use the Codex conversation to explore, question, refine, and approve plans. The human must not have to leave Codex to review or edit an Issue. Present meaningful drafts, tradeoffs, questions, and an approval summary **in the conversation**. Keep the **GitHub Issue body** synchronized as the durable, authoritative record of confirmed decisions, intent, acceptance criteria, and plan. Issue comments are discussion, not a competing specification. Do not create committed `intent.md`, `spec.md`, `plan.md`, or GitHub Issue Artifacts. If the human directly edits an Issue, re-read it and incorporate those edits rather than overwriting them.
 3. `OBJECTIVE.md` is a concise, durable description of *why this project exists* and its direction, not a backlog, design specification, or release calendar. It is the exception to keeping planning artifacts out of Git.
 4. Use GitHub labels for type, area, priority, scope and risk; native sub-issues for distinct outcomes; Projects for status; Wiki for durable technical knowledge; PRs and CI for code review and delivery. Do not create a special authoritative Issue #1 or Version Issues.
 5. `main` (or the repository's configured default branch) is trunk. Use short-lived branches and small, reviewable PRs. For dependent slices, prefer stacks of approximately 2–5 PRs. A stack is not a release boundary. Merge safe, approved slices independently of any release.
@@ -37,11 +37,11 @@ Read [references/bootstrap.md](references/bootstrap.md). Preview the changes and
 
 ### `$sdlc objective`
 
-Read [references/objective.md](references/objective.md). Ask a small series of useful questions, check existing project context, and draft the objective **in a normal GitHub Intent Issue body first**. Upon approval propose the durable `OBJECTIVE.md` in a PR. Never create or privilege Issue #1. No implementation without approval.
+Read [references/objective.md](references/objective.md). Ask focused questions and **review/refine the proposed direction in the Codex conversation**, while maintaining the draft in a normal GitHub Intent Issue body. Summarize the full proposal and request approval **in conversation**. Upon approval propose the durable `OBJECTIVE.md` in a PR. Never create or privilege Issue #1. No implementation without approval.
 
 ### `$sdlc intent`
 
-Read [references/intent.md](references/intent.md). Check alignment with `OBJECTIVE.md`, discover duplicate work, then create or refine an Issue body with intent, criteria, design, decisions, risks and plan. Classify with labels, propose native sub-issues/dependencies for complex outcomes, and present the approval gate before coding.
+Read [references/intent.md](references/intent.md). Check alignment with `OBJECTIVE.md`, discover duplicate work, then **discuss intent, design, and tradeoffs conversationally** while updating the Issue body as decisions are confirmed. Classify with labels, propose native sub-issues/dependencies for complex outcomes, and present a conversational summary and approval gate before coding.
 
 ## Expected reporting
 
