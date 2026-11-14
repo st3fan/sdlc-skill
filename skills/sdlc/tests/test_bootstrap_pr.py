@@ -102,7 +102,7 @@ else:
     def remote_bootstrap_branches(self) -> list[str]:
         output = execute(
             "git", f"--git-dir={self.origin}", "for-each-ref",
-            "--format=%(refname:short)", "refs/heads/docs/sdlc-bootstrap-"
+            "--format=%(refname:short)", "refs/heads/docs/sdlc-bootstrap-*"
         )
         return output.splitlines() if output else []
 
