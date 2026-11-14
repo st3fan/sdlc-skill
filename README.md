@@ -50,6 +50,12 @@ ln -s "$HOME/.local/share/sdlc-skill/skills/sdlc" .agents/skills/sdlc
 
 This does **not** copy the skill's content, but the symlink itself becomes project metadata if committed. Prefer the user-level installation above for your normal solo workflow.
 
+## Planning is conversation-first
+
+The **Codex conversation** is where you and the agent develop the objective or intent. Codex should show the current proposal, ask targeted questions, discuss tradeoffs, and present an approval summary **in chat**. You do **not** need to open a GitHub Issue to review or edit it yourself. Codex keeps the **Issue body** synchronized with confirmed decisions, making GitHub the durable system of record. You may edit an Issue directly if you want; Codex must re-read and respect those changes.
+
+Example: after `$sdlc objective`, Codex should summarize the project direction, ask whether AI behavior or proposed exclusions are correct, update the Issue body as answers are confirmed, and request approval in Codex before proposing the `OBJECTIVE.md` PR.
+
 ## Start a new project
 
 1. Create/open a repository and start Codex there.
