@@ -5,7 +5,7 @@ This project uses the **`$sdlc` Codex skill**. Install it once for your user acc
 
 | What you want | What to type in Codex |
 | --- | --- |
-| Open a Bootstrap PR to prepare or refresh this project | `$sdlc bootstrap` |
+| Discuss technology choices and open a Bootstrap PR for the project guides | `$sdlc bootstrap` |
 | Define or change project purpose and direction | `$sdlc objective` |
 | Start a feature, fix, investigation, or other stream of work | `$sdlc intent` |
 
@@ -13,7 +13,7 @@ These are instructions to a single skill, **not shell commands** or three separa
 
 > `$sdlc intent Improve scan preflight reporting. Help me clarify acceptance criteria and create an Issue; don't implement yet.`
 
-**Typical first-time setup:** `$sdlc bootstrap` → review and merge the Bootstrap PR → `$sdlc objective` → `$sdlc intent`. Bootstrap creates or updates `AGENTS.md` and `HUMANS.md` **on a temporary branch and opens a PR**, preserving custom sections; it never writes directly to trunk or merges for you. Re-run it after updating the installed skill to propose managed-section updates in another PR. When nothing has changed, no PR is needed.
+**Typical first-time setup:** `$sdlc bootstrap` → review and merge the Bootstrap PR → `$sdlc objective` → `$sdlc intent`. Bootstrap asks a few questions about the project's stack, preferences, and tradeoffs, then creates or updates `AGENTS.md`, `HUMANS.md`, and `TECHNOLOGY.md` **on a temporary branch and opens a PR**, preserving custom sections and existing technology choices unless you approve changes; it never writes directly to trunk or merges for you. Re-run it after updating the installed skill to propose managed-section updates in another PR. When nothing has changed, no PR is needed.
 
 **Conversation-first, GitHub-backed:** review drafts, answer questions, refine ideas, and approve direction **inside Codex**. Codex summarizes the proposal in the conversation and updates the GitHub Issue body as decisions are made. The Issue is the durable record, **not required reading or manual editing homework**. You may edit an Issue directly if you prefer; Codex must pick up those edits when it continues.
 
@@ -21,6 +21,7 @@ These are instructions to a single skill, **not shell commands** or three separa
 
 **Where information lives:**
 - `OBJECTIVE.md` in Git describes *why the project exists* and its enduring direction.
+- `TECHNOLOGY.md` in Git records the chosen stack, technology preferences, reasoning, and open constraints; bootstrap discusses these choices with you first.
 - GitHub Issue **bodies** contain the current intent, plans, decisions, and acceptance criteria; native sub-issues break up outcomes.
 - GitHub labels classify Issues, Projects track status, PRs/stacks carry code review, and the Wiki holds reusable architectural knowledge.
 - `AGENTS.md` contains project-specific agent safeguards; `VERSIONS.md` (if present) defines the project's independent release rules.
