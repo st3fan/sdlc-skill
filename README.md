@@ -56,10 +56,16 @@ The **Codex conversation** is where you and the agent develop the objective or i
 
 Example: after `$sdlc objective`, Codex should summarize the project direction, ask whether AI behavior or proposed exclusions are correct, update the Issue body as answers are confirmed, and request approval in Codex before proposing the `OBJECTIVE.md` PR.
 
+### Packaging, distribution, and hosting are distinct decisions
+
+Bootstrap records **how software is packaged**, **how someone obtains it**, **where it runs**, and **how it is deployed/operated**. Questions are tailored to the type of project instead of assuming every project needs a container, Docker Compose, or Kubernetes.
+
+For a CLI, this may mean a native executable distributed through GitHub Releases, with hosting and deployment marked **Not applicable**. For a service, it might mean a container image deployed by Docker Compose on a VPS. For a library, publishing to a package registry may be all that's needed. **Undecided** is a valid answer for a relevant choice that should be deferred; prefer the simplest option that solves today's requirements.
+
 ## Start a new project
 
 1. Create/open a repository and start Codex there.
-2. Run `$sdlc bootstrap`. Codex inspects the repository, asks focused questions about languages, frameworks, storage, deployment, tools, and engineering preferences, and presents an approved `TECHNOLOGY.md` draft in conversation. It opens a **Bootstrap: Stefan's Development Lifecycle** PR with `AGENTS.md`, `HUMANS.md`, and the technology policy. Review and merge the PR; bootstrap never merges automatically.
+2. Run `$sdlc bootstrap`. Codex inspects the repository, identifies whether it is a CLI, library, service, or app, and asks focused questions about languages, frameworks, storage, **packaging**, **distribution**, **hosting**, **deployment**, tooling, and engineering preferences *where relevant*. A CLI can have no hosting; an early project may leave deployment **Undecided**. Prefer the simplest current fit rather than introducing Docker or Kubernetes by default. Codex presents the `TECHNOLOGY.md` draft for approval in conversation. It opens a **Bootstrap: Stefan's Development Lifecycle** PR with `AGENTS.md`, `HUMANS.md`, and the technology policy. Review and merge the PR; bootstrap never merges automatically.
 3. Run `$sdlc objective`. Codex asks focused questions about purpose, audience, outcomes, direction, non-goals, and principles. It records the proposal in a regular GitHub Intent Issue body, then opens a PR for `OBJECTIVE.md` after your approval.
 4. Run `$sdlc intent <your idea>` whenever you want to begin another stream of work.
 
@@ -73,7 +79,7 @@ No special Issue #1, Version Issue, or version-based PR stack is required. For a
 | `skills/sdlc/assets/*` + bootstrap scripts | **Global SDLC** | Canonical managed sections, safe updater, and branch/PR orchestration |
 | `AGENTS.md` | **Project-specific + managed global section** | Local agent instructions, safety constraints, and pointer to the skill |
 | `HUMANS.md` | **Project-specific + managed global section** | How humans invoke the skill and interact with this repository |
-| `TECHNOLOGY.md` | **Project-specific** | Selected stack, usage preferences, rationale, constraints, and explicitly open choices |
+| `TECHNOLOGY.md` | **Project-specific** | Selected stack; packaging and distribution; applicable hosting and deployment; preferences, rationale, constraints, and open choices |
 | `OBJECTIVE.md` | **Project-specific** | Enduring project purpose, direction, outcomes, and non-goals |
 | `VERSIONS.md` (optional) | **Project-specific** | Versioning and release policy; never assumed globally |
 | GitHub Intent Issue **body** | **Per workstream** | Intent, requirements, design, plan, decisions, acceptance criteria |
