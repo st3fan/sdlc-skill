@@ -1,7 +1,7 @@
 <!-- sdlc:managed:start -->
 # Agent guidance
 
-This repository uses **Stefan's Development Lifecycle**, the user-installed Codex skill `$sdlc`. Invoke `$sdlc bootstrap`, `$sdlc objective`, or `$sdlc intent` for lifecycle work; the detailed reusable rules are maintained in that skill, not copied into every project.
+This repository uses **Stefan's Development Lifecycle**, the user-installed Codex skill `$sdlc`. Invoke `$sdlc bootstrap`, `$sdlc objective`, or `$sdlc intent` for lifecycle work; the detailed reusable rules are maintained in that skill, not copied into every project. **Bootstrap creates a reviewable PR for these guides, never a direct trunk change.**
 
 - Read `OBJECTIVE.md` (when present) before proposing significant work. It defines the project's enduring purpose and direction. Use normal GitHub Intent Issues to propose changing it.
 - Keep current intent, acceptance criteria, design decisions, risks, and implementation plan **in GitHub Issue bodies**. Do not commit `intent.md`, `spec.md`, `plan.md`, or use GitHub Issue Artifacts.
