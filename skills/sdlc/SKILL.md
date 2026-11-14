@@ -11,7 +11,7 @@ A GitHub-native, intent-driven workflow for a solo developer working in one repo
 
 Interpret the word after `$sdlc` as the **action argument** (not a separate installed skill or CLI command):
 
-- `bootstrap`: **open a Bootstrap PR** that creates or refreshes `AGENTS.md` and `HUMANS.md`. Never treat local file creation alone as completion.
+- `bootstrap`: **discuss and approve technology choices**, then open a Bootstrap PR that creates or refreshes `AGENTS.md`, `HUMANS.md`, and project-specific `TECHNOLOGY.md` (when missing or deliberately revised). File creation alone is not completion.
 - `objective`: clarify or revise enduring project direction and propose `OBJECTIVE.md`.
 - `intent`: create/refine a GitHub Intent Issue, with optional sub-issues and proposed implementation slices.
 
@@ -19,9 +19,9 @@ If the action is unclear, ask which of the three the developer wants. Do not sil
 
 ## Global rules
 
-1. Read existing repository guidance first: `AGENTS.md`, `HUMANS.md`, `OBJECTIVE.md`, and `VERSIONS.md` when present; preserve stricter project-specific security, testing, and operational requirements. Never treat the skill as authority to override those.
+1. Read existing repository guidance first: `AGENTS.md`, `HUMANS.md`, `OBJECTIVE.md`, `TECHNOLOGY.md`, and `VERSIONS.md` when present; preserve stricter project-specific security, testing, and operational requirements. Never treat the skill as authority to override those.
 2. **Conversation-first, GitHub-backed:** use the Codex conversation to explore, question, refine, and approve plans. The human must not have to leave Codex to review or edit an Issue. Present meaningful drafts, tradeoffs, questions, and an approval summary **in the conversation**. Keep the **GitHub Issue body** synchronized as the durable, authoritative record of confirmed decisions, intent, acceptance criteria, and plan. Issue comments are discussion, not a competing specification. Do not create committed `intent.md`, `spec.md`, `plan.md`, or GitHub Issue Artifacts. If the human directly edits an Issue, re-read it and incorporate those edits rather than overwriting them.
-3. `OBJECTIVE.md` is a concise, durable description of *why this project exists* and its direction, not a backlog, design specification, or release calendar. It is the exception to keeping planning artifacts out of Git.
+3. `OBJECTIVE.md` describes *why this project exists*; `TECHNOLOGY.md` records the **project-specific technology stack, engineering preferences, rationale, and constraints**. Both are durable guidance in Git, not feature specifications, work plans, or release calendars. Consult `TECHNOLOGY.md` before proposing implementations; material technology changes require conversation and human approval.
 4. Use GitHub labels for type, area, priority, scope and risk; native sub-issues for distinct outcomes; Projects for status; Wiki for durable technical knowledge; PRs and CI for code review and delivery. Do not create a special authoritative Issue #1 or Version Issues.
 5. `main` (or the repository's configured default branch) is trunk. Use short-lived branches and small, reviewable PRs. For dependent slices, prefer stacks of approximately 2–5 PRs. A stack is not a release boundary. Merge safe, approved slices independently of any release.
 6. Human approval is required for significant scope, architecture, security, compatibility, cost or operational decisions; starting implementation; merging PRs; running impactful/live operations; tagging, publishing releases; and deploying. These are separate approvals. Never treat an Issue as implementation authorization.
@@ -33,7 +33,7 @@ If the action is unclear, ask which of the three the developer wants. Do not sil
 
 ### `$sdlc bootstrap`
 
-Read [references/bootstrap.md](references/bootstrap.md). Preview the changes and reconcile conflicts, then use [scripts/bootstrap_pr.py](scripts/bootstrap_pr.py) to prepare an isolated branch, apply the templates, push **only the two guides**, open a **Bootstrap** pull request, and return its verified URL. [scripts/bootstrap.py](scripts/bootstrap.py) is only the internal file updater, **not** the full action. Never modify the current checkout or directly write to trunk. Never merge the PR without human approval. If already current, report no diff; if GitHub access is blocked, report the blocker rather than claiming completion.
+Read [references/bootstrap.md](references/bootstrap.md) and [references/technology.md](references/technology.md). First discover the existing stack and **ask focused questions in Codex**, then summarize choices and preferences for human approval. For a new or revised technology policy, supply the approved `TECHNOLOGY.md` draft using `--technology-file`. Preview and reconcile conflicts, then use [scripts/bootstrap_pr.py](scripts/bootstrap_pr.py) to prepare an isolated branch, apply the templates and approved technology policy, stage **only `AGENTS.md`, `HUMANS.md`, and `TECHNOLOGY.md`**, open a **Bootstrap** pull request, and return its verified URL. [scripts/bootstrap.py](scripts/bootstrap.py) is only the internal file updater, **not** the full action. Never modify the current checkout or directly write to trunk. Never merge the PR without human approval. If already current, report no diff; if GitHub access is blocked, report the blocker rather than claiming completion.
 
 ### `$sdlc objective`
 
