@@ -10,7 +10,7 @@ From a project directory, start `codex` and type:
 
 | Action | Example | What happens |
 | --- | --- | --- |
-| **bootstrap** | `$sdlc bootstrap` | Create/update `AGENTS.md` and `HUMANS.md` from reusable, non-destructive templates |
+| **bootstrap** | `$sdlc bootstrap` | Open a **Bootstrap PR** creating/updating `AGENTS.md` and `HUMANS.md` from reusable templates, without changing your current checkout |
 | **objective** | `$sdlc objective` | Discuss purpose and direction, capture a normal Intent Issue, and propose `OBJECTIVE.md` in a PR after approval |
 | **intent** | `$sdlc intent Add target exclusions` | Clarify a workstream, write the GitHub Issue body, apply labels, and plan sub-issues and reviewable PRs |
 
@@ -53,7 +53,7 @@ This does **not** copy the skill's content, but the symlink itself becomes proje
 ## Start a new project
 
 1. Create/open a repository and start Codex there.
-2. Run `$sdlc bootstrap` to install the project-facing `AGENTS.md` and `HUMANS.md`.
+2. Run `$sdlc bootstrap` to open a **Bootstrap: Stefan's Development Lifecycle** PR containing `AGENTS.md` and `HUMANS.md`. Review and merge that PR; bootstrap never merges automatically.
 3. Run `$sdlc objective`. Codex asks focused questions about purpose, audience, outcomes, direction, non-goals, and principles. It records the proposal in a regular GitHub Intent Issue body, then opens a PR for `OBJECTIVE.md` after your approval.
 4. Run `$sdlc intent <your idea>` whenever you want to begin another stream of work.
 
@@ -64,7 +64,7 @@ No special Issue #1, Version Issue, or version-based PR stack is required. For a
 | Artifact | Scope | Purpose |
 | --- | --- | --- |
 | `skills/sdlc/SKILL.md` + references | **Global SDLC** | Rules for bootstrap, objective, intent, and the GitHub-native lifecycle |
-| `skills/sdlc/assets/*` + bootstrap script | **Global SDLC** | Canonical managed sections of generated guides and their safe updater |
+| `skills/sdlc/assets/*` + bootstrap scripts | **Global SDLC** | Canonical managed sections, safe updater, and branch/PR orchestration |
 | `AGENTS.md` | **Project-specific + managed global section** | Local agent instructions, safety constraints, and pointer to the skill |
 | `HUMANS.md` | **Project-specific + managed global section** | How humans invoke the skill and interact with this repository |
 | `OBJECTIVE.md` | **Project-specific** | Enduring project purpose, direction, outcomes, and non-goals |
@@ -84,18 +84,19 @@ Work merges in small safe slices into the default branch; releases happen separa
 git -C "$HOME/.local/share/sdlc-skill" pull --ff-only
 ```
 
-Then from each project that you want to refresh, run `$sdlc bootstrap` again.
+Then from each project that you want to refresh, run `$sdlc bootstrap` again to **open a new Bootstrap PR**. If nothing has changed, Codex reports the guides are current without creating an empty PR.
 
 The bootstrap script replaces only the text between `<!-- sdlc:managed:start -->` and `<!-- sdlc:managed:end -->`. It never overwrites custom text outside those markers. For **previously unmanaged** documents, it appends a managed section for review rather than replacing old rules. Codex should reconcile contradictory legacy instructions with you.
 
-You may inspect the results directly:
+The actual `$sdlc bootstrap` action previews an isolated worktree and then opens a PR from a temporary branch based on the remote default branch. It only stages the two guide files, leaves your current checkout unchanged, and never merges the PR. It requires a **clean worktree**, a GitHub remote, Git identity, and an authenticated `gh` CLI. An existing open Bootstrap PR is reported instead of creating a duplicate.
+
+You can inspect the proposed changes **without creating a PR**:
 
 ```sh
-python3 "$HOME/.local/share/sdlc-skill/skills/sdlc/scripts/bootstrap.py" --root . --dry-run
-python3 "$HOME/.local/share/sdlc-skill/skills/sdlc/scripts/bootstrap.py" --root . --check
+python3 "$HOME/.local/share/sdlc-skill/skills/sdlc/scripts/bootstrap_pr.py" --root . --dry-run
 ```
 
-`--check` returns 1 when updates are needed; default mode applies updates. No project needs a copy of the updater.
+Codex normally runs this for you. The low-level `scripts/bootstrap.py` updates files in a provided directory and is used **only inside** the Bootstrap PR workflow; running that helper by itself is not a completed bootstrap. No project needs a copy of either script.
 
 ## Development and tests
 
@@ -111,7 +112,9 @@ skills/sdlc/
   references/objective.md
   references/intent.md
   scripts/bootstrap.py
+  scripts/bootstrap_pr.py
   tests/test_bootstrap.py
+  tests/test_bootstrap_pr.py
 ```
 
 Run tests from the skill repository root:
@@ -120,7 +123,7 @@ Run tests from the skill repository root:
 python3 -m unittest discover -s skills/sdlc/tests -v
 ```
 
-The updater requires Python 3.10+ and no third-party libraries. Codex needs Git and an authenticated GitHub CLI (`gh`) or an equivalent authorized GitHub integration for GitHub operations.
+The Bootstrap PR workflow requires Python 3.10+ and no third-party libraries. Codex needs Git and an authenticated GitHub CLI (`gh`) or an equivalent authorized GitHub integration for GitHub operations.
 
 ## Scope
 

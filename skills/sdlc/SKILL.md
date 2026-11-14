@@ -11,7 +11,7 @@ A GitHub-native, intent-driven workflow for a solo developer working in one repo
 
 Interpret the word after `$sdlc` as the **action argument** (not a separate installed skill or CLI command):
 
-- `bootstrap`: create or refresh `AGENTS.md` and `HUMANS.md` using the packaged templates and updater.
+- `bootstrap`: **open a Bootstrap PR** that creates or refreshes `AGENTS.md` and `HUMANS.md`. Never treat local file creation alone as completion.
 - `objective`: clarify or revise enduring project direction and propose `OBJECTIVE.md`.
 - `intent`: create/refine a GitHub Intent Issue, with optional sub-issues and proposed implementation slices.
 
@@ -33,7 +33,7 @@ If the action is unclear, ask which of the three the developer wants. Do not sil
 
 ### `$sdlc bootstrap`
 
-Read [references/bootstrap.md](references/bootstrap.md). The canonical templates are [assets/AGENTS.md](assets/AGENTS.md) and [assets/HUMANS.md](assets/HUMANS.md). Use [scripts/bootstrap.py](scripts/bootstrap.py) to update only the skill-managed Markdown sections while preserving everything else. Inspect changes and reconcile existing conflicting policies with the human; do not overwrite custom rules.
+Read [references/bootstrap.md](references/bootstrap.md). Preview the changes and reconcile conflicts, then use [scripts/bootstrap_pr.py](scripts/bootstrap_pr.py) to prepare an isolated branch, apply the templates, push **only the two guides**, open a **Bootstrap** pull request, and return its verified URL. [scripts/bootstrap.py](scripts/bootstrap.py) is only the internal file updater, **not** the full action. Never modify the current checkout or directly write to trunk. Never merge the PR without human approval. If already current, report no diff; if GitHub access is blocked, report the blocker rather than claiming completion.
 
 ### `$sdlc objective`
 

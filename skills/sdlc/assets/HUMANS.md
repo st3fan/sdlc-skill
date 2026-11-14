@@ -5,7 +5,7 @@ This project uses the **`$sdlc` Codex skill**. Install it once for your user acc
 
 | What you want | What to type in Codex |
 | --- | --- |
-| Prepare or refresh this project | `$sdlc bootstrap` |
+| Open a Bootstrap PR to prepare or refresh this project | `$sdlc bootstrap` |
 | Define or change project purpose and direction | `$sdlc objective` |
 | Start a feature, fix, investigation, or other stream of work | `$sdlc intent` |
 
@@ -13,7 +13,7 @@ These are instructions to a single skill, **not shell commands** or three separa
 
 > `$sdlc intent Improve scan preflight reporting. Help me clarify acceptance criteria and create an Issue; don't implement yet.`
 
-**Typical first-time setup:** `$sdlc bootstrap` → `$sdlc objective` → `$sdlc intent`. Bootstrap creates/updates `AGENTS.md` and `HUMANS.md` and preserves any custom sections. Re-run it after updating the installed skill to refresh the managed sections.
+**Typical first-time setup:** `$sdlc bootstrap` → review and merge the Bootstrap PR → `$sdlc objective` → `$sdlc intent`. Bootstrap creates or updates `AGENTS.md` and `HUMANS.md` **on a temporary branch and opens a PR**, preserving custom sections; it never writes directly to trunk or merges for you. Re-run it after updating the installed skill to propose managed-section updates in another PR. When nothing has changed, no PR is needed.
 
 **Human decisions:** describe the desired outcome, approve significant scope/design choices, authorize implementation, review and explicitly approve PR merges. Starting a stream of work does **not** automatically authorize coding, merging, running live operations, releasing, or deploying.
 
