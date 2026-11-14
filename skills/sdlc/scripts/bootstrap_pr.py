@@ -68,7 +68,7 @@ def bootstrap(
     if existing:
         return f"An existing Bootstrap PR must be reviewed or updated: {existing[0]['url']}"
 
-    technology = read_technology(technology_file.resolve()) if technology_file else None
+    technology = read_technology(technology_file.absolute()) if technology_file else None
 
     git(root, "fetch", "--no-tags", "origin", default_branch)
     branch = f"{BRANCH_PREFIX}{uuid4().hex[:10]}"
