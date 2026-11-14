@@ -15,6 +15,8 @@ These are instructions to a single skill, **not shell commands** or three separa
 
 **Typical first-time setup:** `$sdlc bootstrap` → review and merge the Bootstrap PR → `$sdlc objective` → `$sdlc intent`. Bootstrap creates or updates `AGENTS.md` and `HUMANS.md` **on a temporary branch and opens a PR**, preserving custom sections; it never writes directly to trunk or merges for you. Re-run it after updating the installed skill to propose managed-section updates in another PR. When nothing has changed, no PR is needed.
 
+**Conversation-first, GitHub-backed:** review drafts, answer questions, refine ideas, and approve direction **inside Codex**. Codex summarizes the proposal in the conversation and updates the GitHub Issue body as decisions are made. The Issue is the durable record, **not required reading or manual editing homework**. You may edit an Issue directly if you prefer; Codex must pick up those edits when it continues.
+
 **Human decisions:** describe the desired outcome, approve significant scope/design choices, authorize implementation, review and explicitly approve PR merges. Starting a stream of work does **not** automatically authorize coding, merging, running live operations, releasing, or deploying.
 
 **Where information lives:**
