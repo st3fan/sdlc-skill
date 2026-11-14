@@ -37,6 +37,14 @@ class BootstrapPullRequestTests(unittest.TestCase):
         self.log = root / "gh.log"
         self.project.mkdir()
         self.bin.mkdir()
+        self.technology_draft = root / "technology-approved.md"
+        self.technology_draft.write_text(
+            "# Technology\n\n## Languages and runtime\n\n"
+            "- Python 3.12: preferred for backend workflows\n\n"
+            "## Preferences and rationale\n\n"
+            "- Prefer typed Python and focused tests\n",
+            encoding="utf-8",
+        )
 
         execute("git", "init", "--bare", str(self.origin))
         execute("git", "init", "-b", "main", str(self.project))
@@ -119,24 +127,28 @@ else:
         )
 
     def test_creates_bootstrap_pr_without_touching_checkout(self) -> None:
-        result = bootstrap_pr.bootstrap(self.project)
+        result = bootstrap_pr.bootstrap(self.project, technology_file=self.technology_draft)
         self.assertIn("https://github.com/example/project/pull/42", result)
         self.assert_checkout_unchanged()
         self.assertFalse((self.project / "AGENTS.md").exists())
         self.assertFalse((self.project / "HUMANS.md").exists())
+        self.assertFalse((self.project / "TECHNOLOGY.md").exists())
         branches = self.remote_bootstrap_branches()
         self.assertEqual(len(branches), 1)
-        for name in ("AGENTS.md", "HUMANS.md"):
+        for name in ("AGENTS.md", "HUMANS.md", "TECHNOLOGY.md"):
             content = execute(
                 "git", f"--git-dir={self.origin}", "show", f"{branches[0]}:{name}"
             )
-            self.assertIn("<!-- sdlc:managed:start -->", content)
+            if name == "TECHNOLOGY.md":
+                self.assertIn("Prefer typed Python", content)
+            else:
+                self.assertIn("<!-- sdlc:managed:start -->", content)
         create = [x for x in self.gh_calls() if x[:2] == ["pr", "create"]]
         self.assertEqual(len(create), 1)
         self.assertIn("Bootstrap: Stefan's Development Lifecycle", create[0])
 
     def test_dry_run_does_not_push_or_open_pr(self) -> None:
-        result = bootstrap_pr.bootstrap(self.project, dry_run=True)
+        result = bootstrap_pr.bootstrap(self.project, dry_run=True, technology_file=self.technology_draft)
         self.assertIn("Dry run only", result)
         self.assert_checkout_unchanged()
         self.assertEqual(self.remote_bootstrap_branches(), [])
@@ -146,7 +158,10 @@ else:
         assets = SCRIPT.parents[1] / "assets"
         for name in ("AGENTS.md", "HUMANS.md"):
             (self.project / name).write_text((assets / name).read_text(), encoding="utf-8")
-        execute("git", "add", "AGENTS.md", "HUMANS.md", cwd=self.project)
+        (self.project / "TECHNOLOGY.md").write_text(
+            self.technology_draft.read_text(encoding="utf-8"), encoding="utf-8"
+        )
+        execute("git", "add", "AGENTS.md", "HUMANS.md", "TECHNOLOGY.md", cwd=self.project)
         execute("git", "commit", "-m", "existing guides", cwd=self.project)
         execute("git", "push", "origin", "main", cwd=self.project)
         self.original_head = execute("git", "rev-parse", "HEAD", cwd=self.project)
@@ -157,10 +172,66 @@ else:
         self.assertEqual(self.remote_bootstrap_branches(), [])
         self.assertFalse(any(x[:2] == ["pr", "create"] for x in self.gh_calls()))
 
+    def test_missing_technology_draft_blocks_bootstrap(self) -> None:
+        with self.assertRaisesRegex(ValueError, "TECHNOLOGY.md is missing"):
+            bootstrap_pr.bootstrap(self.project)
+        self.assert_checkout_unchanged()
+        self.assertEqual(self.remote_bootstrap_branches(), [])
+        self.assertFalse(any(x[:2] == ["pr", "create"] for x in self.gh_calls()))
+
+    def test_existing_technology_policy_is_preserved(self) -> None:
+        content = "# Technology\n\n- Go: existing backend choice\n"
+        (self.project / "TECHNOLOGY.md").write_text(content, encoding="utf-8")
+        execute("git", "add", "TECHNOLOGY.md", cwd=self.project)
+        execute("git", "commit", "-m", "existing technology policy", cwd=self.project)
+        execute("git", "push", "origin", "main", cwd=self.project)
+        self.original_head = execute("git", "rev-parse", "HEAD", cwd=self.project)
+
+        result = bootstrap_pr.bootstrap(self.project)
+        self.assertIn("Bootstrap PR created", result)
+        self.assert_checkout_unchanged()
+        branch = self.remote_bootstrap_branches()[0]
+        saved = execute(
+            "git", f"--git-dir={self.origin}", "show", f"{branch}:TECHNOLOGY.md"
+        )
+        self.assertEqual(saved, content.strip())
+        changed = execute(
+            "git", f"--git-dir={self.origin}", "diff", "--name-only",
+            "main", branch,
+        )
+        self.assertNotIn("TECHNOLOGY.md", changed.splitlines())
+
+    def test_approved_technology_revision_is_included(self) -> None:
+        original = "# Technology\n\n- Go: current backend\n"
+        (self.project / "TECHNOLOGY.md").write_text(original, encoding="utf-8")
+        execute("git", "add", "TECHNOLOGY.md", cwd=self.project)
+        execute("git", "commit", "-m", "existing stack", cwd=self.project)
+        execute("git", "push", "origin", "main", cwd=self.project)
+        self.original_head = execute("git", "rev-parse", "HEAD", cwd=self.project)
+        result = bootstrap_pr.bootstrap(
+            self.project, technology_file=self.technology_draft
+        )
+        self.assertIn("Bootstrap PR created", result)
+        self.assert_checkout_unchanged()
+        branch = self.remote_bootstrap_branches()[0]
+        saved = execute(
+            "git", f"--git-dir={self.origin}", "show", f"{branch}:TECHNOLOGY.md"
+        )
+        self.assertIn("Prefer typed Python", saved)
+
+    def test_empty_technology_draft_is_rejected(self) -> None:
+        self.technology_draft.write_text("  \n", encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "empty"):
+            bootstrap_pr.bootstrap(
+                self.project, technology_file=self.technology_draft
+            )
+        self.assert_checkout_unchanged()
+        self.assertEqual(self.remote_bootstrap_branches(), [])
+
     def test_dirty_checkout_is_rejected(self) -> None:
         (self.project / "uncommitted.txt").write_text("retain", encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "not clean"):
-            bootstrap_pr.bootstrap(self.project)
+            bootstrap_pr.bootstrap(self.project, technology_file=self.technology_draft)
         self.assertEqual((self.project / "uncommitted.txt").read_text(), "retain")
         self.assertEqual(self.remote_bootstrap_branches(), [])
         self.assertFalse(self.gh_calls())
@@ -172,7 +243,7 @@ else:
             "url": "https://github.com/example/project/pull/30",
         }]
         with patch.dict(os.environ, {"SDLC_EXISTING_PRS": json.dumps(existing)}):
-            result = bootstrap_pr.bootstrap(self.project)
+            result = bootstrap_pr.bootstrap(self.project, technology_file=self.technology_draft)
         self.assertIn("https://github.com/example/project/pull/30", result)
         self.assert_checkout_unchanged()
         self.assertEqual(self.remote_bootstrap_branches(), [])

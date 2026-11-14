@@ -2,7 +2,7 @@
 
 **Goal:** Establish or deliberately revise an enduring `OBJECTIVE.md` through a normal Intent Issue and reviewed PR.
 
-1. Read the repository, README, current `OBJECTIVE.md` if any, active Issues and historical documents. Existing project guidance Issues (including #1 in old projects) may inform the draft but have **no privileged authority**.
+1. Read the repository, README, current `OBJECTIVE.md` and `TECHNOLOGY.md` if any, active Issues and historical documents. Distinguish the project's purpose from its technical implementation preferences. Existing project guidance Issues (including #1 in old projects) may inform the draft but have **no privileged authority**.
 2. **Use the Codex conversation as the working interface.** Ask focused questions in short rounds about the problem and audience, purpose, desired outcomes, direction, scope/non-goals, and principles. Skip answered questions. Share an understandable draft or summary *in conversation*, propose alternatives when consequential, and ask the human for a decision there. **Do not tell the human to go to GitHub to review/edit the Issue as the default next step.**
 3. Find an appropriate existing Intent Issue or create a **regular GitHub Issue** with no special number. Keep its **body** synchronized with the direction as the conversation progresses: settled purpose, outcomes, constraints, open questions, and acceptance criteria. Comments are discussion, not the canonical draft. If the human edits the Issue directly, re-read and reconcile those edits before updating it; direct Issue edits are valid input, not a problem to undo.
 4. Draft a concise `OBJECTIVE.md` with these headings (adapt as justified):

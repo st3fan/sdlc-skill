@@ -27,7 +27,18 @@ def github(root: Path, *args: str) -> subprocess.CompletedProcess[str]:
     return command("gh", *args, cwd=root)
 
 
-def bootstrap(root: Path, *, dry_run: bool = False) -> str:
+def read_technology(path: Path) -> str:
+    if path.is_symlink() or not path.is_file():
+        raise ValueError(f"Technology draft must be a regular file: {path}")
+    content = path.read_text(encoding="utf-8")
+    if not content.strip():
+        raise ValueError("Technology draft is empty")
+    return content.rstrip("\n") + "\n"
+
+
+def bootstrap(
+    root: Path, *, dry_run: bool = False, technology_file: Path | None = None
+) -> str:
     root = root.resolve()
     actual_root = Path(git(root, "rev-parse", "--show-toplevel").stdout.strip()).resolve()
     if actual_root != root:
@@ -57,6 +68,8 @@ def bootstrap(root: Path, *, dry_run: bool = False) -> str:
     if existing:
         return f"An existing Bootstrap PR must be reviewed or updated: {existing[0]['url']}"
 
+    technology = read_technology(technology_file.absolute()) if technology_file else None
+
     git(root, "fetch", "--no-tags", "origin", default_branch)
     branch = f"{BRANCH_PREFIX}{uuid4().hex[:10]}"
     updater = Path(__file__).resolve().with_name("bootstrap.py")
@@ -71,28 +84,43 @@ def bootstrap(root: Path, *, dry_run: bool = False) -> str:
             if updated.stdout:
                 print(updated.stdout, end="")
 
-            git(checkout, "add", "--", "AGENTS.md", "HUMANS.md")
+            target = checkout / "TECHNOLOGY.md"
+            if target.is_symlink():
+                raise ValueError("Refusing to edit a symlink: TECHNOLOGY.md")
+            if technology is not None:
+                target.write_text(technology, encoding="utf-8")
+            elif not target.is_file():
+                raise ValueError(
+                    "TECHNOLOGY.md is missing. Ask the human about the technology "
+                    "stack and preferences, obtain approval, then pass an approved "
+                    "draft using --technology-file PATH."
+                )
+
+            git(checkout, "add", "--", "AGENTS.md", "HUMANS.md", "TECHNOLOGY.md")
             diff = git(checkout, "diff", "--cached", "--quiet", check=False)
             if diff.returncode == 0:
-                return "Guides are already current; no Bootstrap PR is necessary."
+                return "Bootstrap artifacts are already current; no Bootstrap PR is necessary."
             if diff.returncode != 1:
                 raise RuntimeError("Unable to determine whether the Bootstrap guides changed")
 
             git(checkout, "diff", "--cached", "--check")
             if dry_run:
-                print(git(checkout, "diff", "--cached", "--", "AGENTS.md", "HUMANS.md").stdout)
+                print(git(checkout, "diff", "--cached", "--", "AGENTS.md", "HUMANS.md", "TECHNOLOGY.md").stdout)
                 return "Dry run only; no branch was pushed or PR created."
 
             git(checkout, "commit", "-m", "docs: bootstrap Stefan's Development Lifecycle")
             git(checkout, "push", "-u", "origin", branch)
             body = (
                 "## Bootstrap\n\n"
-                "Install or refresh project-facing AGENTS.md and HUMANS.md "
-                "from Stefan's Development Lifecycle skill.\n\n"
-                "Only skill-managed sections were replaced. Existing custom "
+                "Install or refresh AGENTS.md and HUMANS.md from Stefan's "
+                "Development Lifecycle skill, and establish or maintain the "
+                "project-specific TECHNOLOGY.md stack policy.\n\n"
+                "Only skill-managed guide sections were replaced. Existing custom "
                 "instructions outside those sections are preserved. "
                 "Please review any older guidance for conflicting rules.\n\n"
-                "No project code, objective, version policy, or releases are changed. "
+                "Technology choices require human discussion and approval before "
+                "this PR is proposed. No project code, objective, version policy, "
+                "or releases are changed. "
                 "Merge only after human review and authorization."
             )
             github(
@@ -123,9 +151,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path.cwd())
     parser.add_argument("--dry-run", action="store_true", help="Preview the proposed diff; don't push or open a PR")
+    parser.add_argument(
+        "--technology-file", type=Path,
+        help="Approved, complete TECHNOLOGY.md draft; required if missing on trunk",
+    )
     args = parser.parse_args()
     try:
-        print(bootstrap(args.root, dry_run=args.dry_run))
+        print(bootstrap(args.root, dry_run=args.dry_run, technology_file=args.technology_file))
     except (OSError, ValueError, RuntimeError, KeyError, json.JSONDecodeError, subprocess.CalledProcessError) as error:
         detail = error.stderr.strip() if isinstance(error, subprocess.CalledProcessError) and error.stderr else str(error)
         print(f"sdlc bootstrap: {detail}", file=sys.stderr)
