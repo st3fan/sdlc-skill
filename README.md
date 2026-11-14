@@ -38,6 +38,18 @@ The installer copies the skill into a Codex skill directory. The symlink approac
 
 **If you already have a skill named `sdlc` installed**, inspect it first rather than overwriting it. You need only one installed copy.
 
+### Optional: install only for one Codex project
+
+If you do not want user-wide installation, place a symlink to the same skill directory in just that repository:
+
+```sh
+cd /path/to/your/project
+mkdir -p .agents/skills
+ln -s "$HOME/.local/share/sdlc-skill/skills/sdlc" .agents/skills/sdlc
+```
+
+This does **not** copy the skill's content, but the symlink itself becomes project metadata if committed. Prefer the user-level installation above for your normal solo workflow.
+
 ## Start a new project
 
 1. Create/open a repository and start Codex there.
