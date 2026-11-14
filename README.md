@@ -10,7 +10,7 @@ From a project directory, start `codex` and type:
 
 | Action | Example | What happens |
 | --- | --- | --- |
-| **bootstrap** | `$sdlc bootstrap` | Open a **Bootstrap PR** creating/updating `AGENTS.md` and `HUMANS.md` from reusable templates, without changing your current checkout |
+| **bootstrap** | `$sdlc bootstrap` | Discuss the technology stack and preferences, then open a **Bootstrap PR** containing `AGENTS.md`, `HUMANS.md`, and `TECHNOLOGY.md` as needed—without changing your current checkout |
 | **objective** | `$sdlc objective` | Discuss purpose and direction, capture a normal Intent Issue, and propose `OBJECTIVE.md` in a PR after approval |
 | **intent** | `$sdlc intent Add target exclusions` | Clarify a workstream, write the GitHub Issue body, apply labels, and plan sub-issues and reviewable PRs |
 
@@ -59,7 +59,7 @@ Example: after `$sdlc objective`, Codex should summarize the project direction, 
 ## Start a new project
 
 1. Create/open a repository and start Codex there.
-2. Run `$sdlc bootstrap` to open a **Bootstrap: Stefan's Development Lifecycle** PR containing `AGENTS.md` and `HUMANS.md`. Review and merge that PR; bootstrap never merges automatically.
+2. Run `$sdlc bootstrap`. Codex inspects the repository, asks focused questions about languages, frameworks, storage, deployment, tools, and engineering preferences, and presents an approved `TECHNOLOGY.md` draft in conversation. It opens a **Bootstrap: Stefan's Development Lifecycle** PR with `AGENTS.md`, `HUMANS.md`, and the technology policy. Review and merge the PR; bootstrap never merges automatically.
 3. Run `$sdlc objective`. Codex asks focused questions about purpose, audience, outcomes, direction, non-goals, and principles. It records the proposal in a regular GitHub Intent Issue body, then opens a PR for `OBJECTIVE.md` after your approval.
 4. Run `$sdlc intent <your idea>` whenever you want to begin another stream of work.
 
@@ -73,6 +73,7 @@ No special Issue #1, Version Issue, or version-based PR stack is required. For a
 | `skills/sdlc/assets/*` + bootstrap scripts | **Global SDLC** | Canonical managed sections, safe updater, and branch/PR orchestration |
 | `AGENTS.md` | **Project-specific + managed global section** | Local agent instructions, safety constraints, and pointer to the skill |
 | `HUMANS.md` | **Project-specific + managed global section** | How humans invoke the skill and interact with this repository |
+| `TECHNOLOGY.md` | **Project-specific** | Selected stack, usage preferences, rationale, constraints, and explicitly open choices |
 | `OBJECTIVE.md` | **Project-specific** | Enduring project purpose, direction, outcomes, and non-goals |
 | `VERSIONS.md` (optional) | **Project-specific** | Versioning and release policy; never assumed globally |
 | GitHub Intent Issue **body** | **Per workstream** | Intent, requirements, design, plan, decisions, acceptance criteria |
@@ -80,7 +81,7 @@ No special Issue #1, Version Issue, or version-based PR stack is required. For a
 | GitHub PRs / PR stacks, CI | **Per workstream** | Reviewable code delivery and validation |
 | GitHub Wiki | **Project-specific** | Durable technical and operational knowledge |
 
-`OBJECTIVE.md` is a durable charter, not a detailed spec or a roadmap. Implementation plans remain in Issue bodies, **not** in committed `intent.md`/`spec.md`/`plan.md` or GitHub Issue Artifacts.
+`OBJECTIVE.md` is a durable charter; `TECHNOLOGY.md` is a separately maintained project stack policy. Neither is a detailed feature specification or roadmap. Implementation plans remain in Issue bodies, **not** in committed `intent.md`/`spec.md`/`plan.md` or GitHub Issue Artifacts.
 
 Work merges in small safe slices into the default branch; releases happen separately on human request, following that project's `VERSIONS.md` if present.
 
@@ -90,17 +91,22 @@ Work merges in small safe slices into the default branch; releases happen separa
 git -C "$HOME/.local/share/sdlc-skill" pull --ff-only
 ```
 
-Then from each project that you want to refresh, run `$sdlc bootstrap` again to **open a new Bootstrap PR**. If nothing has changed, Codex reports the guides are current without creating an empty PR.
+Then from each project that you want to refresh, run `$sdlc bootstrap` again to **open a new Bootstrap PR**. Codex preserves an existing `TECHNOLOGY.md` unless you choose to revise it. If nothing has changed, it reports the artifacts are current without creating an empty PR.
 
 The bootstrap script replaces only the text between `<!-- sdlc:managed:start -->` and `<!-- sdlc:managed:end -->`. It never overwrites custom text outside those markers. For **previously unmanaged** documents, it appends a managed section for review rather than replacing old rules. Codex should reconcile contradictory legacy instructions with you.
 
-The actual `$sdlc bootstrap` action previews an isolated worktree and then opens a PR from a temporary branch based on the remote default branch. It only stages the two guide files, leaves your current checkout unchanged, and never merges the PR. It requires a **clean worktree**, a GitHub remote, Git identity, and an authenticated `gh` CLI. An existing open Bootstrap PR is reported instead of creating a duplicate.
+The actual `$sdlc bootstrap` action previews an isolated worktree and then opens a PR from a temporary branch based on the remote default branch. It stages only `AGENTS.md`, `HUMANS.md`, and `TECHNOLOGY.md` (when new or changed), leaves your current checkout unchanged, and never merges the PR. It requires a **clean worktree**, a GitHub remote, Git identity, and an authenticated `gh` CLI. An existing open Bootstrap PR is reported instead of creating a duplicate.
 
-You can inspect the proposed changes **without creating a PR**:
+You can inspect the proposed changes **without creating a PR**. When the project lacks `TECHNOLOGY.md` or you approved a new version, Codex writes the completed draft to a temporary file outside the repository and passes it to both commands:
 
 ```sh
-python3 "$HOME/.local/share/sdlc-skill/skills/sdlc/scripts/bootstrap_pr.py" --root . --dry-run
+python3 "$HOME/.local/share/sdlc-skill/skills/sdlc/scripts/bootstrap_pr.py" \
+  --root . --technology-file /tmp/approved-technology.md --dry-run
+python3 "$HOME/.local/share/sdlc-skill/skills/sdlc/scripts/bootstrap_pr.py" \
+  --root . --technology-file /tmp/approved-technology.md
 ```
+
+For an existing project with an approved, unchanged `TECHNOLOGY.md`, omit `--technology-file`. The low-level updater does not generate technology decisions; Codex gets them from the conversation.
 
 Codex normally runs this for you. The low-level `scripts/bootstrap.py` updates files in a provided directory and is used **only inside** the Bootstrap PR workflow; running that helper by itself is not a completed bootstrap. No project needs a copy of either script.
 
@@ -115,6 +121,7 @@ skills/sdlc/
   assets/AGENTS.md
   assets/HUMANS.md
   references/bootstrap.md
+  references/technology.md
   references/objective.md
   references/intent.md
   scripts/bootstrap.py
