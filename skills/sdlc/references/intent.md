@@ -2,7 +2,7 @@
 
 **Goal:** Turn an idea or problem into a well-scoped GitHub workstream, not an immediate unreviewed coding session.
 
-1. Read `OBJECTIVE.md` (when it exists), existing guidance, relevant code, Issues/PRs, Project board, and any Wiki documentation. Search for duplicate or overlapping work. If the idea conflicts with the objective, explain the conflict; propose a separate objective revision rather than silently expanding scope.
+1. Read `OBJECTIVE.md` and `TECHNOLOGY.md` (when they exist), existing guidance, relevant code, Issues/PRs, Project board, and any Wiki documentation. Respect confirmed stack choices and preferences when proposing designs; surface any needed technology-policy change for human approval. Search for duplicate or overlapping work. If the idea conflicts with the objective, explain the conflict; propose a separate objective revision rather than silently expanding scope.
 2. Clarify **problem, outcome, constraints, non-goals, success criteria, and important uncertainties** **in the Codex conversation**. Present a short draft and specific questions there, not a direction to go review or edit an Issue. Ask only materially useful questions and offer a recommended design when tradeoffs can be reasoned about.
 3. Create or update a normal Issue. For a substantial outcome, use an **Intent Issue** with `scope:intent`. Record canonical content in its body:
    ```markdown
