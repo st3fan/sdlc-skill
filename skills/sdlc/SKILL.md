@@ -1,6 +1,6 @@
 ---
 name: sdlc
-description: Stefan's Development Lifecycle for Codex. Use when a developer asks to bootstrap or refresh AGENTS.md and HUMANS.md, establish or revise a project's OBJECTIVE.md, or start and plan a stream of work as a GitHub Intent Issue. Explicit actions: $sdlc bootstrap, $sdlc objective, $sdlc intent.
+description: Stefan's Development Lifecycle for Codex. Use when a developer asks to bootstrap or refresh AGENTS.md, HUMANS.md, and TECHNOLOGY.md with project-specific stack choices, establish or revise a project's OBJECTIVE.md, or start and plan a stream of work as a GitHub Intent Issue. Explicit actions: $sdlc bootstrap, $sdlc objective, $sdlc intent.
 ---
 
 # Stefan's Development Lifecycle
