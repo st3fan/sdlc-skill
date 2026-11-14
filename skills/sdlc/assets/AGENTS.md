@@ -4,7 +4,7 @@
 This repository uses **Stefan's Development Lifecycle**, the user-installed Codex skill `$sdlc`. Invoke `$sdlc bootstrap`, `$sdlc objective`, or `$sdlc intent` for lifecycle work; the detailed reusable rules are maintained in that skill, not copied into every project. **Bootstrap creates a reviewable PR for these guides, never a direct trunk change.**
 
 - Read `OBJECTIVE.md` (when present) before proposing significant work. It defines the project's enduring purpose and direction. Use normal GitHub Intent Issues to propose changing it.
-- Keep current intent, acceptance criteria, design decisions, risks, and implementation plan **in GitHub Issue bodies**. Do not commit `intent.md`, `spec.md`, `plan.md`, or use GitHub Issue Artifacts.
+- Work **conversation-first, GitHub-backed**: discuss questions, drafts, decisions, and approvals with the human in Codex. Keep current intent, acceptance criteria, design decisions, risks, and implementation plan **synchronized in GitHub Issue bodies**. Do not require the human to edit or approve an Issue in the GitHub UI; direct Issue edits are valid and must be respected. Do not commit `intent.md`, `spec.md`, `plan.md`, or use GitHub Issue Artifacts.
 - Use labels, native sub-issues/dependencies, GitHub Projects for status, and small, reviewable PRs or stacked PRs. Integrate approved safe changes into the default branch (trunk), independently of releases.
 - The human approves significant decisions, start of implementation, PR merges, impactful operations, releases, and deployments separately. Never infer one approval from another.
 - If `VERSIONS.md` exists, follow it for release policy. Do not create Version Issues or assume a release accompanies a merge.
