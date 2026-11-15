@@ -1,6 +1,6 @@
 # Stefan's Development Lifecycle
 
-A reusable **Codex skill** for a solo, GitHub-native, AI-assisted software development lifecycle. Install it once and use the same three actions in any project. The project repository keeps only lightweight operating guides and durable project-specific guidance, not a private copy of the skill.
+A reusable **Codex skill** for a solo, GitHub-native, AI-assisted software development lifecycle. Install it once and use the same four actions in any project. The project repository keeps only lightweight operating guides and durable project-specific guidance, not a private copy of the skill.
 
 Inspired by [Anthropic's AI-Native SDLC Playbook](https://claude.com/resources/articles/the-ai-native-sdlc-playbook), adapted to GitHub Issues, Projects, PRs, and trunk-based development.
 
@@ -12,7 +12,8 @@ From a project directory, start `codex` and type:
 | --- | --- | --- |
 | **bootstrap** | `$sdlc bootstrap` | Discuss the technology stack and preferences, then open a **Bootstrap PR** containing `AGENTS.md`, `HUMANS.md`, and `TECHNOLOGY.md` as needed—without changing your current checkout |
 | **objective** | `$sdlc objective` | Discuss purpose and direction, capture a normal Intent Issue, and propose `OBJECTIVE.md` in a PR after approval |
-| **intent** | `$sdlc intent Add target exclusions` | Clarify a workstream, write the GitHub Issue body, apply labels, and plan sub-issues and reviewable PRs |
+| **intent** | `$sdlc intent Add target exclusions` | Discuss, document, and approve a bounded Intent without implementing it; prepare as many as needed |
+| **execute** | `$sdlc execute #42 #43` or `$sdlc execute ready` | Review an explicit batch of approved Intents, authorize execution, then produce separate reviewable PRs |
 
 `$sdlc` activates **one skill**. The next word is an *action argument*, not a shell subcommand or another skill. You can also invoke it using Codex's `/skills` picker. Codex may use it automatically for matching tasks, but explicit invocation is the clearest choice.
 
@@ -67,7 +68,8 @@ For a CLI, this may mean a native executable distributed through GitHub Releases
 1. Create/open a repository and start Codex there.
 2. Run `$sdlc bootstrap`. Codex inspects the repository, identifies whether it is a CLI, library, service, or app, and asks focused questions about languages, frameworks, storage, **packaging**, **distribution**, **hosting**, **deployment**, tooling, and engineering preferences *where relevant*. A CLI can have no hosting; an early project may leave deployment **Undecided**. Prefer the simplest current fit rather than introducing Docker or Kubernetes by default. Codex presents the `TECHNOLOGY.md` draft for approval in conversation. It opens a **Bootstrap: Stefan's Development Lifecycle** PR with `AGENTS.md`, `HUMANS.md`, and the technology policy. Review and merge the PR; bootstrap never merges automatically.
 3. Run `$sdlc objective`. Codex asks focused questions about purpose, audience, outcomes, direction, non-goals, and principles. It records the proposal in a regular GitHub Intent Issue body, then opens a PR for `OBJECTIVE.md` after your approval.
-4. Run `$sdlc intent <your idea>` whenever you want to begin another stream of work.
+4. Run `$sdlc intent <your idea>` to prepare and approve work without writing code. Repeat for as many independent or dependent Intents as you want.
+5. Run `$sdlc execute #42 #43` for a selected set, or `$sdlc execute ready` to review all approved ready Intents. Codex presents the batch, dependency order, risks, and scope before requesting one execution approval. Work then proceeds within the mandates, creating reviewable PRs; merges, releases, deployments, and live operations require separate approval.
 
 No special Issue #1, Version Issue, or version-based PR stack is required. For an existing repository, the skill adapts its guidance while retaining existing security and operational constraints.
 
@@ -75,7 +77,7 @@ No special Issue #1, Version Issue, or version-based PR stack is required. For a
 
 | Artifact | Scope | Purpose |
 | --- | --- | --- |
-| `skills/sdlc/SKILL.md` + references | **Global SDLC** | Rules for bootstrap, objective, intent, and the GitHub-native lifecycle |
+| `skills/sdlc/SKILL.md` + references | **Global SDLC** | Rules for bootstrap, objective, intent, execute, and the GitHub-native lifecycle |
 | `skills/sdlc/assets/*` + bootstrap scripts | **Global SDLC** | Canonical managed sections, safe updater, and branch/PR orchestration |
 | `AGENTS.md` | **Project-specific + managed global section** | Local agent instructions, safety constraints, and pointer to the skill |
 | `HUMANS.md` | **Project-specific + managed global section** | How humans invoke the skill and interact with this repository |
@@ -130,6 +132,7 @@ skills/sdlc/
   references/technology.md
   references/objective.md
   references/intent.md
+  references/execute.md
   scripts/bootstrap.py
   scripts/bootstrap_pr.py
   tests/test_bootstrap.py
