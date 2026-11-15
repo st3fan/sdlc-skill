@@ -7,7 +7,8 @@ This project uses the **`$sdlc` Codex skill**. Install it once for your user acc
 | --- | --- |
 | Discuss technology choices and open a Bootstrap PR for the project guides | `$sdlc bootstrap` |
 | Define or change project purpose and direction | `$sdlc objective` |
-| Start a feature, fix, investigation, or other stream of work | `$sdlc intent` |
+| Prepare and approve a feature, fix, or other stream of work without coding | `$sdlc intent` |
+| Execute one or several approved Intents in a batch | `$sdlc execute #42 #43` or `$sdlc execute ready` |
 
 These are instructions to a single skill, **not shell commands** or three separate installed skills. You can add detail after the action, for example:
 
@@ -17,7 +18,7 @@ These are instructions to a single skill, **not shell commands** or three separa
 
 **Conversation-first, GitHub-backed:** review drafts, answer questions, refine ideas, and approve direction **inside Codex**. Codex summarizes the proposal in the conversation and updates the GitHub Issue body as decisions are made. The Issue is the durable record, **not required reading or manual editing homework**. You may edit an Issue directly if you prefer; Codex must pick up those edits when it continues.
 
-**Human decisions:** describe the desired outcome, approve significant scope/design choices, authorize implementation, review and explicitly approve PR merges. Starting a stream of work does **not** automatically authorize coding, merging, running live operations, releasing, or deploying.
+**Human decisions:** use `$sdlc intent` to prepare and approve as many Intents as desired without coding; use `$sdlc execute` to review and authorize an explicit selection for execution. Approval of individual Intents is not batch execution approval. Merge, live operations, release and deployment require their own approvals.
 
 **Where information lives:**
 - `OBJECTIVE.md` in Git describes *why the project exists* and its enduring direction.
@@ -26,7 +27,7 @@ These are instructions to a single skill, **not shell commands** or three separa
 - GitHub labels classify Issues, Projects track status, PRs/stacks carry code review, and the Wiki holds reusable architectural knowledge.
 - `AGENTS.md` contains project-specific agent safeguards; `VERSIONS.md` (if present) defines the project's independent release rules.
 
-**Resuming:** give Codex the Issue number: `$sdlc intent Continue #123: read the Issue body, sub-issues, linked PRs and current status before proposing a next step.`
+**Resuming:** `$sdlc intent Continue planning #123` for preparation, or `$sdlc execute #123` to inspect linked PRs and resume remaining approved work. `$sdlc execute ready` inventories approved, uncompleted Intents and asks for batch authorization; it must not silently execute newly discovered Issues.
 
 **Releasing:** ask Codex to inspect `VERSIONS.md` and the tested trunk commit, propose a tag and release notes, and wait for your separate approval. Merge approval is never release approval.
 <!-- sdlc:managed:end -->
