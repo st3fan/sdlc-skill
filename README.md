@@ -56,6 +56,10 @@ The **Codex conversation** is where you and the agent develop the objective or i
 
 Example: after `$sdlc objective`, Codex should summarize the project direction, ask whether AI behavior or proposed exclusions are correct, update the Issue body as answers are confirmed, and request approval in Codex before proposing the `OBJECTIVE.md` PR.
 
+## Attention during execution
+
+Once you authorize implementation, Codex handles routine code, test, documentation, and PR preparation choices without asking at every step. It investigates ordinary failures and asks when a decision would materially change the agreed outcome, scope, architecture, security, compatibility, cost, or operations. A request for a decision should include the evidence, a recommendation, and the consequences. Codex can continue unrelated authorized work while waiting for your answer. Separate approvals for merges, releases, deployments, and impactful live actions still apply.
+
 ### Packaging, distribution, and hosting are distinct decisions
 
 Bootstrap records **how software is packaged**, **how someone obtains it**, **where it runs**, and **how it is deployed/operated**. Questions are tailored to the type of project instead of assuming every project needs a container, Docker Compose, or Kubernetes.
