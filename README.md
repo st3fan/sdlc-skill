@@ -14,7 +14,7 @@ From a project directory, start `codex` and type:
 | **objective** | `$sdlc objective` | Discuss purpose and direction, capture a normal Intent Issue, and propose `OBJECTIVE.md` in a PR after approval |
 | **intent** | `$sdlc intent Add target exclusions` | Clarify a workstream, write the GitHub Issue body, apply labels, and plan sub-issues and reviewable PRs |
 
-`$sdlc` activates **one skill**. The next word is an *action argument*, not a shell subcommand or another skill. You can also invoke it using Codex's `/skills` picker. Codex may use it automatically for matching tasks, but explicit invocation is the clearest choice.
+`$sdlc` activates **one skill**. The next word is an *action argument*, not a shell subcommand or another skill. You can also invoke it using Codex's `/skills` picker. Natural-language requests or reports about new features, bugs, refactors, maintenance, or investigations use the `intent` action without requiring `$sdlc`; name an action explicitly when you want `bootstrap` or `objective`.
 
 ## Install once for all projects (recommended)
 
