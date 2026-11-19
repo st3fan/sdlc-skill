@@ -60,6 +60,12 @@ Example: after `$sdlc objective`, Codex should summarize the project direction, 
 
 Once you authorize implementation, Codex handles routine code, test, documentation, and PR preparation choices without asking at every step. It investigates ordinary failures and asks when a decision would materially change the agreed outcome, scope, architecture, security, compatibility, cost, or operations. A request for a decision should include the evidence, a recommendation, and the consequences. Codex can continue unrelated authorized work while waiting for your answer. Separate approvals for merges, releases, deployments, and impactful live actions still apply.
 
+## Execution mandates
+
+An Intent Issue can state the boundary for later work: outcome and scope, constraints and exclusions, decisions Codex must return to you, and what completion means. The skill supplies routine defaults, so a small Intent needs only a short mandate when there are no special conditions. Codex discusses the boundary with you and records the approved version in the Issue body.
+
+**Approving an Intent and its mandate prepares it; it does not start implementation.** Starting work still needs a separate explicit authorization. An Issue's existence or Ready Project status does not grant it. The mandate also does not cover merges, releases, deployments, or impactful live operations.
+
 ### Packaging, distribution, and hosting are distinct decisions
 
 Bootstrap records **how software is packaged**, **how someone obtains it**, **where it runs**, and **how it is deployed/operated**. Questions are tailored to the type of project instead of assuming every project needs a container, Docker Compose, or Kubernetes.

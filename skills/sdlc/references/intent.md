@@ -10,15 +10,16 @@
    ## Acceptance criteria
    ## Design
    ## Implementation plan
+   ## Execution mandate
    ## Risks and open questions
    ## Decisions
    ## Delivery
    ```
-   Use only sections that add value. **Update the body as decisions are confirmed through conversation**; do not make the human maintain it manually. If the human edits an Issue directly, re-read and reconcile their changes before subsequent updates. Do not overwrite direct edits, bury authoritative plans in comments, or commit planning Markdown.
+   Use only sections that add value. In **Execution mandate**, record the outcome and scope, constraints and exclusions, exceptions to the skill's routine actions, hand-back triggers, and completion criteria; refer to acceptance criteria instead of duplicating them. A small Intent with no special constraints can use one concise sentence. **Update the body as decisions are confirmed through conversation**; do not make the human maintain it manually. If the human edits an Issue directly, re-read and reconcile their changes before subsequent updates. Do not overwrite direct edits, bury authoritative plans in comments, or commit planning Markdown.
 4. Label issues using `type:feature|bug|maintenance|research` (one), `area:*` (one or more relevant areas), and `priority:p0|p1|p2` (one). Add `scope:intent` for parent work, `risk:security|breaking|data` for applicable risks, and `delivery:stack` if dependent PR slices are planned. Treat GitHub Project Status as the status authority rather than using status labels. Check labels exist before applying them; propose a one-time label setup rather than inventing labels on an unrelated Issue.
 5. For large work, propose **native GitHub sub-issues** representing independently verifiable deliverables and native dependency relationships for blockers. PRs are *reviewable code slices*, not necessarily one per sub-issue. Large dependent changes may be stacks of approximately 2–5 PRs based on trunk, with small independently safe merges.
-6. **Summarize the resulting intent and plan in Codex**, including scope, acceptance criteria, design tradeoffs, open questions, and risks. Ask for explicit human approval **in conversation** before implementation; linking the Issue is useful for traceability but is not a request to leave Codex and review it elsewhere. An Issue being created or marked Ready is not automatically permission to run live operations, merge, release, or deploy.
-7. If implementation is subsequently approved, use short-lived branches, small PRs, tests and CI. Keep Issue body and Project status current; merge only on explicit human approval. Releases are separate, governed by project `VERSIONS.md` when present.
+6. **Summarize the resulting intent, plan, and execution mandate in Codex**, including scope, acceptance criteria, design tradeoffs, open questions, risks, and the actions or decisions reserved for the human. Ask for explicit approval of the Intent and mandate **in conversation**, then record the approved boundary under `Decisions` in the Issue body. This prepares the Intent for future work; it does not authorize implementation. An Issue's existence or Ready Project status is not evidence of execution authorization. Ask separately before starting implementation.
+7. Before separately authorized implementation or a resumed attempt, re-read the Issue and confirm the current work remains within the approved mandate. A material change to that boundary needs renewed approval. If implementation is subsequently approved, use short-lived branches, small PRs, tests and CI. Keep Issue body and Project status current; merge only on explicit human approval. Releases are separate, governed by project `VERSIONS.md` when present.
 
 When the repository has not yet been bootstrapped, recommend `$sdlc bootstrap` or `$sdlc objective` first, unless the user specifically requests a standalone Issue. Do not force Issue #1 or version-based parent Issues.
 
